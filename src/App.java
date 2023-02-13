@@ -10,20 +10,20 @@ public class App {
 
     /* Заполняем всякие коэфы рыб*/
     public static void createKoef(){
-        fishKoef.put("osetr", new FishKoef(5, 6, 7));
-        fishKoef.put("treska", new FishKoef(2, 7, 7));
-        fishKoef.put("shuka", new FishKoef(4, 2, 3));
-        fishKoef.put("forel", new FishKoef(3, 9, 15));
-        fishKoef.put("karp", new FishKoef(2, 9, 10));
+        fishKoef.put("osetr", new FishKoef(0.5, 0.6, 0.3));
+        fishKoef.put("treska", new FishKoef(0.2, 0.7, 0.4));
+        fishKoef.put("shuka", new FishKoef(0.4, 0.8, 0.3));
+        fishKoef.put("forel", new FishKoef(0.3, 0.9, 0.15));
+        fishKoef.put("karp", new FishKoef(0.2, 0.9, 0.10));
     }
 
     /*Блок инициации прудов */
     public static void createPounds(Scanner in){
-        System.out.print("------------------------------");
+        System.out.println("------------------------------");
 
         ponds = new Pond[numOfPonds];
         for (int i = 0; i < numOfPonds; i++){
-            System.out.print("Пруд " + i);
+            System.out.println("Пруд " + i);
 
             System.out.print("Число молодняка :");
             int numOfYoungFish = in.nextInt();
@@ -33,7 +33,7 @@ public class App {
             String fishName = in.next();
             Pond pond_i = new Pond(numOfYoungFish, numOfOldFish, fishName);
             ponds[i] = pond_i;
-            System.out.print("-----------------------");
+            System.out.println("-----------------------");
         }
     }
     public static void main(String[] args) throws Exception {
@@ -41,7 +41,7 @@ public class App {
 
         createKoef();
 
-        System.out.print("---------------------- \n Начальные параметры");
+        System.out.println("---------------------- \n Начальные параметры");
         System.out.print("Число прудов :");
         numOfPonds = in.nextInt();
 
@@ -58,9 +58,9 @@ public class App {
         System.out.print("Обязан продать рыбы в неделю (кг):");
         int mustSellFishFor1week_Kg = in.nextInt();
 
-        double[] costsFishFor3Week = new double[contractDuration / 3];
-        double[] costsFoodFor3Week = new double[contractDuration / 3];
-        for (int i = 0 ; i < contractDuration / 3; i++){
+        double[] costsFishFor3Week = new double[contractDuration / 3 + 1];
+        double[] costsFoodFor3Week = new double[contractDuration / 3 + 1];
+        for (int i = 0 ; i < contractDuration / 3 + 1; i++){
             System.out.print("Стоимость рыбы для " + (i+1) + "го промежутка по 3 недели:"); 
             costsFishFor3Week[i] = in.nextInt();
             System.out.print("Стоимость корма для " + (i+1) + "го промежутка по 3 недели:"); 
@@ -148,13 +148,21 @@ public class App {
             if (notCellFish > 0){ // штрафуем за недопродажу
                 cashCapital -= notCellFish * startContract.penalty;
             }
-            if (cashCapital < 0){
-                System.out.println("Обанкротились :(");
-                break;
-            }
-            else{
+            
+            
+                System.out.println("***************************");
                 System.out.println("После недели " + i + "на счету (руб): " + cashCapital);
-            }
+                for (int k =0; k< numOfPonds; k++) {
+                    Pond tmp = ponds[k];
+                    System.out.println("В пруде " + k + " молодняка: " + tmp.numOfYoungFish);
+                    System.out.println("В пруде " + k + " взрослых рыб: " + tmp.numOfOldFish);
+                }
+                if (cashCapital < 0){
+                    System.out.println("Обанкротились :(");
+                    break;
+                }
+                System.out.println("***************************");
+            
 
         }
 
